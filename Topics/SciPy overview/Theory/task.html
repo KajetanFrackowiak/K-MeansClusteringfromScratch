@@ -1,0 +1,91 @@
+<h2>SciPy overview</h2>
+<div class="step-text">
+<p><strong>SciPy</strong> (pronounced "Sigh Pie")<strong> </strong>is a library and a Python-based ecosystem of open-source software for mathematics, science, and engineering. It is designed mostly for some difficult cases where other scientific libraries fail.</p>
+<h5 id="installation">Installation</h5>
+<p>First things first, let's open the command line and install the package. Installation of SciPy is rather straightforward:</p>
+<pre><code class="language-no-highlight">pip install scipy</code></pre>
+<p>Keep in mind that SciPy requires NumPy to be installed, but the command above should install the missing package on its own or at least remind you to do so.</p>
+<p>Then, SciPy can be imported just like any other package:</p>
+<pre><code class="language-python">import scipy</code></pre>
+<p>Note that <code class="language-python">import scipy</code> does not import all the SciPy subpackages, we will discuss it in more detail later.</p>
+<h5 id="scientific-python-ecosystem">Scientific Python Ecosystem </h5>
+<p>When people say "SciPy" sometimes they refer not to the individual library, but rather to the entire ecosystem of scientific Python libraries. Indeed, this ecosystem is grand, it contains libraries that cover all aspects of data science and scientific computing. All of those libraries can be used in tandem with each other.</p>
+<p style="text-align: center;"><img alt="Python Ecosystem" height="500" src="https://ucarecdn.com/809f51d2-0f2b-490e-8f92-e18193629245/" width="518"/></p>
+<p>This ecosystem provides tools for data analysis (Pandas), data visualization (Matplotlib), solving algebraic equations symbolically (SymPy), manipulating matrices, and dealing with some higher mathematics (NumPy). However, in this topic, we focus on the SciPy library itself. SciPy is there to cover special cases in scientific computing when other packages are not enough.</p>
+<h5 id="numpy-vs-scipy">NumPy vs SciPy</h5>
+<p>SciPy is quite often compared to NumPy, as both share some of their functionality. The difference between them is very nicely described in <a href="https://scipy.org/faq/#what-is-the-difference-between-numpy-and-scipy" rel="noopener noreferrer nofollow" target="_blank">SciPy FAQ</a>:</p>
+<blockquote>
+<p><samp>In an ideal world, NumPy would contain nothing but the array data type and the most basic operations: indexing, sorting, reshaping, basic elementwise functions, etc. All numerical code would reside in SciPy. However, one of NumPy's important goals is compatibility, so NumPy tries to retain all features supported by either of its predecessors. Thus, NumPy contains some linear algebra functions and Fourier transforms, even though these more properly belong in SciPy. In any case, SciPy contains more fully-featured versions of the linear algebra modules, as well as many other numerical algorithms. If you are doing scientific computing with Python, you should probably install both NumPy and SciPy. Most new features belong in SciPy rather than NumPy.</samp></p>
+</blockquote>
+<p>The main idea is that SciPy became some kind of overhead on NumPy, more specifically, SciPy includes NumPy as a whole and adds some new functions and faster versions of the existing ones on top of it.</p>
+<h5 id="when-to-use-scipy">When to use SciPy?</h5>
+<p>As we said before, SciPy and NumPy share some functionality. Indeed, both SciPy and NumPy have <code class="language-python">linalg</code> subpackage. Both libraries can be used to perform simple operations like matrix inversion. For example, in NumPy it looks like this:</p>
+<pre><code class="language-python">import numpy as np
+from numpy.linalg import inv
+
+A = np.array([[1., 3.], [3., 4.]])
+print(inv(A))
+# [[-0.8  0.6]
+#  [ 0.6 -0.2]]</code></pre>
+<p>And with SciPy we can do exactly the same thing</p>
+<pre><code class="language-python">import numpy as np
+from scipy.linalg import inv
+
+A = np.array([[1., 3.], [3., 4.]])
+print(inv(A))
+# [[-0.8  0.6]
+#  [ 0.6 -0.2]]</code></pre>
+<p>In some cases, like on extremely large matrices, SciPy might even be faster.</p>
+<p>What is more, sometimes you may encounter problems where NumPy alone can't get the job done. An example would be the Hessenberg decomposition of a matrix <span class="math-tex">\(A\)</span> into a unitary matrix <span class="math-tex">\(Q\)</span> and a Hessenberg matrix <span class="math-tex">\(H\)</span> such that:</p>
+<p><span class="math-tex">\[A = Q H Q^H\]</span></p>
+<p>where <span class="math-tex">\(Q^H\)</span> is the Hermitian conjugate of <span class="math-tex">\(Q\)</span>. If you want to use NumPy alone, you'll have to implement an algorithm to find this decomposition on your own, while SciPy already has a built-in function specifically to solve this problem:</p>
+<pre><code class="language-python">import numpy as np
+from scipy.linalg import hessenberg
+
+A = np.array([[2, 5, 8, 7], [5, 2, 2, 8], [7, 5, 6, 6], [5, 4, 4, 8]])
+H, Q = hessenberg(A, calc_q=True)
+print(H)
+# [[  2.         -11.65843866   1.42005301   0.25349066]
+#  [ -9.94987437  14.53535354  -5.31022304   2.43081618]
+#  [  0.          -1.83299243   0.38969961  -0.51527034]
+#  [  0.           0.          -3.83189513   1.07494686]]
+</code></pre>
+<p>The same is true for some other subpackages. For example, both SciPy and NumPy have subpackages for integration, but in NumPy, you can find only integration using the trapezoid rule (<a href="https://numpy.org/doc/stable/reference/generated/numpy.trapz.html" rel="noopener noreferrer nofollow" target="_blank">numpy.trapz</a> function), while SciPy offers a <a href="https://docs.scipy.org/doc/scipy/reference/integrate.html#module-scipy.integrate" rel="noopener noreferrer nofollow" target="_blank">whole range of various integration routines</a>, from Simpson's rule to general multiple integrals and initial value problem for systems of ordinary differential equations.</p>
+<p>To sum up, NumPy provides a number of functions that can help with basic curve fitting, linear algebra, Fourier transforms, etc., while SciPy is the library that actually contains fully-featured versions of these functions along with many others. However, if all you need is some simple operations on arrays or some basic mathematical operations, NumPy should be sufficient and you don't need to use SciPy.</p>
+<h5 id="scipy-subpackages">SciPy subpackages</h5>
+<p>Let's take a closer look at the SciPy library itself.<br/>
+SciPy is organized into subpackages covering vast scientific computing domains. </p>
+<ul>
+<li>For linear algebra, there are <code class="language-python">linalg</code> and <code class="language-python">sparse</code> submodules;</li>
+<li>For signal analysis <code class="language-python">fft</code> and <code class="language-python">signal</code> are invaluable;</li>
+<li>For integration and some other advanced calculus, there exist <code class="language-python">integrate</code> and <code class="language-python">special</code> submodules;</li>
+<li>If you want to treat images as n-diminesional NumPy arrays, check the <code class="language-python">ndimage</code><em> </em>submodule;</li>
+<li>For dealing with curves there are <code class="language-python">optimize</code> and <code class="language-python">interpolate</code> submodules;</li>
+<li>All other SciPy's submodules are even more specialized. You can find more about them in the <a href="https://docs.scipy.org/doc/scipy/reference/" rel="noopener noreferrer nofollow" target="_blank">documentation</a></li>
+</ul>
+<p>Important note: SciPy subpackages need to be imported exclusively prior to using them. For example, to use functions from the <code class="language-python">integrate</code> subpackage you can import it in two ways:</p>
+<ul>
+<li>
+<pre><code class="language-python">from scipy import integrate</code></pre>
+</li>
+<li>
+<pre><code class="language-python">import scipy.integrate</code></pre>
+</li>
+</ul>
+<h5 id="scipy-help-and-documentation">SciPy help and documentation</h5>
+<p>All of the SciPy's packages are quite complicated and contain a vast number of functions. To figure out how to use them, it's always a good idea to follow the <a href="https://docs.scipy.org/doc/scipy/tutorial/index.html" rel="noopener noreferrer nofollow" target="_blank">official documentation</a>. It is quite extensive and there are many usage examples.</p>
+<p>Alternatively, we can use Python's <code class="language-python">help()</code> function to get information about functions or packages:</p>
+<pre><code class="language-python">from scipy import integrate
+
+help(integrate)
+</code></pre>
+<h5 id="summary">Summary</h5>
+<p>In this topic, we have learned that:</p>
+<ul>
+<li>SciPy is an integral part of a larger scientific Python ecosystem;</li>
+<li>SciPy is a powerful tool that complements other libraries;</li>
+<li>It covers all major domains of data science and scientific computing;</li>
+<li>SciPy library has extensive <a href="https://docs.scipy.org/doc/scipy/reference/index.html" rel="noopener noreferrer nofollow" target="_blank">documentation</a> that contains examples of how to use all functions;</li>
+<li>Use SciPy if NumPy was not powerful enough.</li>
+</ul>
+</div>

@@ -1,0 +1,16 @@
+# course config files
+*.yaml
+
+# gradle
+.gradle/
+build
+
+
+# idea config
+.idea
+
+# old stages
+/K-Means Clustering from Scratch/*
+!/K-Means Clustering from Scratch/task/
+/K-Means Clustering from Scratch/task/*
+!/K-Means Clustering from Scratch/task/solution.py
